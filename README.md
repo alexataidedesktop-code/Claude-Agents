@@ -38,7 +38,10 @@ Full descriptions, capabilities, suggested tools, example prompts, and the compl
 ├── claude-agents.json    # the registry (exported from the Hub artifact)
 ├── loader.py             # Python loader + CLI (get_agent, list_agents, search, validate)
 ├── LICENSE               # MIT license
-├── .gitignore            # standard Python ignores (optional, recommended)
+├── .gitignore            # standard Python ignores
+├── .github/
+│   └── workflows/
+│       └── validate.yml  # CI: validates the registry on every push
 └── README.md             # this file
 ```
 
@@ -184,6 +187,7 @@ Two prompts received structural revisions beyond simple tool-name swaps:
 
 - **Automation Orchestrator** and **Chief of Staff (Meta)** were reframed to acknowledge that Claude doesn't run parallel agents. They now describe sequential checkpoints inside a single conversation, and recommend Claude Projects for persistence across sessions.
 - **Deep Research Agent** was updated to explicitly invoke Claude's built-in citation system and the standard copyright limits (paraphrase by default, quotes under 15 words, one quote per source).
+
 ---
 
 ## Updating the registry
