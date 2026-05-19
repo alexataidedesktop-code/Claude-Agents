@@ -1,0 +1,28 @@
+name: Validate registry
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate JSON syntax
+        run: python -m json.tool claude-agents.json > /dev/null
+
+      - name: Validate registry schema
+        run: python loader.py validate
+
+      - name: List all agents (sanity check)
+        run: python loader.py list
