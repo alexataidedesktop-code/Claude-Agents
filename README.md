@@ -36,6 +36,9 @@ Full descriptions, capabilities, suggested tools, example prompts, and the compl
 ```
 .
 ├── claude-agents.json    # the registry (exported from the Hub artifact)
+├── loader.py             # Python loader + CLI (get_agent, list_agents, search, validate)
+├── LICENSE               # MIT license
+├── .gitignore            # standard Python ignores (optional, recommended)
 └── README.md             # this file
 ```
 
