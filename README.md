@@ -180,8 +180,7 @@ These prompts were originally written for a Grok-style environment with tools li
 Two prompts received structural revisions beyond simple tool-name swaps:
 
 - **Automation Orchestrator** and **Chief of Staff (Meta)** were reframed to acknowledge that Claude doesn't run parallel agents. They now describe sequential checkpoints inside a single conversation, and recommend Claude Projects for persistence across sessions.
-- **Deep Research Agent** was updated to explicitly invoke Claude's `` citation tags and the standard copyright limits (paraphrase by default, quotes under 15 words, one quote per source).
-
+- **Deep Research Agent** was updated to explicitly invoke Claude's built-in citation system and the standard copyright limits (paraphrase by default, quotes under 15 words, one quote per source).
 ---
 
 ## Updating the registry
