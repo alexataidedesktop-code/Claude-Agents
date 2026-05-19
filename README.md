@@ -214,8 +214,7 @@ When adding an agent, please include all schema fields and write the `systemProm
 
 ## License
 
-Add the license of your choice (MIT and Apache-2.0 are common for prompt registries). The prompts themselves are short enough to be considered reference material, but pick a license so consumers know where they stand.
-
+Released under the **MIT License** — see [LICENSE](./LICENSE) for the full text. You can use, modify, and redistribute these prompts freely; attribution is appreciated but not required.
 ---
 
 ## Acknowledgements
