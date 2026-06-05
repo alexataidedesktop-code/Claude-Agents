@@ -1,6 +1,8 @@
 # Claude Agents Registry
 
-A curated set of 8 specialized system prompts ("agents") for [Claude](https://claude.ai), adapted from an earlier Grok-based registry. Each agent is a self-contained persona designed to be dropped into a [Claude Project](https://docs.claude.com/) or pasted as the opening message of a chat.
+[![Validate](https://github.com/alexataidedesktop-code/Claude-Agents/actions/workflows/validate.yml/badge.svg)](https://github.com/alexataidedesktop-code/Claude-Agents/actions/workflows/validate.yml)
+
+A curated set of 14 specialized system prompts ("agents") for [Claude](https://claude.ai), adapted from an earlier Grok-based registry and extended with new Claude-native personas. Each agent is a self-contained persona designed to be dropped into a [Claude Project](https://docs.claude.com/) or pasted as the opening message of a chat.
 
 The registry is distributed as a single JSON file (`claude-agents.json`) that any application, script, or UI can consume.
 
@@ -8,7 +10,7 @@ The registry is distributed as a single JSON file (`claude-agents.json`) that an
 
 ## Why this exists
 
-Generic chat assistants are flexible but unfocused. By committing a persona to a Claude Project's custom instructions, you get consistent, high-quality output for a specific kind of work — research, code, writing, data, visuals, orchestration, or Brazilian-market work — without re-explaining the brief every session.
+Generic chat assistants are flexible but unfocused. By committing a persona to a Claude Project's custom instructions, you get consistent, high-quality output for a specific kind of work — research, code, writing, data, visuals, orchestration, intelligence analysis, exam prep, or Brazilian-market work — without re-explaining the brief every session.
 
 This repository keeps those personas version-controlled, reviewable, and shareable.
 
@@ -26,6 +28,12 @@ This repository keeps those personas version-controlled, reviewable, and shareab
 | ⚙️ | Automation Orchestrator | Sequential decomposition of complex projects |
 | 🇧🇷 | Brazilian Cultural Agent | PT-BR localization, business culture, regulation |
 | 🧠 | Chief of Staff (Meta) | Strategic planning across the other personas |
+| 🌍 | Geopolitical Intelligence | Sanctions, energy security, political risk → market implications |
+| 📰 | News Monitor | Time-bound news with reliability ratings and mandatory source links |
+| 📋 | Due Diligence | Company fundamental analysis, filings, bull/base/bear theses |
+| 🏛️ | Political Analysis | Domestic politics with bias-disclosed expert sourcing |
+| 📚 | Study Strategist | Brazilian public-contest prep (TJ-SP, Vunesp), study plans, practice questions |
+| 📜 | Contract Intelligence | Clause-by-clause commercial contract review under Brazilian law |
 
 Full descriptions, capabilities, suggested tools, example prompts, and the complete system prompt for each agent live inside `claude-agents.json`.
 
@@ -103,6 +111,10 @@ For any persona you'll use more than once:
 4. Optionally add reference files (style guides, examples, datasets) to the project's knowledge
 5. Start any chat inside that project — Claude will adopt the persona automatically
 
+#### Multi-agent project (all personas on tap)
+
+Alternatively, create one project, upload `claude-agents.json` to its knowledge, and use custom instructions that let you invoke any agent by ID (e.g. `/deep_research`, `/study_strategist`). This trades a little persona crispness for the convenience of switching specialists mid-conversation. See the project's custom instructions template in the repo discussions or generate one with the Claude Agent Hub.
+
 ### Option B — One-off paste
 
 For occasional use, paste the `systemPrompt` as the very first message of a new chat. The persona will hold for the rest of that conversation but won't carry over to new chats.
@@ -134,44 +146,31 @@ print(resp.content[0].text)
 
 ### Option D — Loader module
 
-A minimal Python loader (mirrors the original registry's API):
+The repo ships a `loader.py` with a small library + CLI. As a library:
 
 ```python
-import json
-from typing import Any
+from loader import get_agent, list_agents, get_prompt, search
 
-with open("claude-agents.json") as f:
-    AGENTS: dict[str, dict[str, Any]] = json.load(f)
+list_agents()                       # all 14 agent keys
+get_prompt("contract_intelligence") # just the system prompt string
+search("brazilian")                 # every agent whose metadata mentions Brazil
+```
 
+As a CLI:
 
-def get_agent(agent_key: str) -> dict[str, Any]:
-    """Load a specific agent by key."""
-    if agent_key not in AGENTS:
-        raise ValueError(
-            f"Agent '{agent_key}' not found. Available: {list(AGENTS.keys())}"
-        )
-    return AGENTS[agent_key]
-
-
-def list_agents() -> list[str]:
-    """Return all available agent keys."""
-    return list(AGENTS.keys())
-
-
-def print_agent_summary(agent_key: str) -> None:
-    """Pretty print agent information."""
-    a = get_agent(agent_key)
-    print(f"\n{a['emoji']} {a['name']}")
-    print(f"Description: {a['description']}")
-    print(f"Capabilities: {', '.join(a['capabilities'])}")
-    print(f"Suggested tools: {', '.join(a['claudeTools'])}")
+```bash
+python loader.py list                       # list all agents
+python loader.py show study_strategist      # full metadata for one agent
+python loader.py prompt due_diligence       # print only the system prompt
+python loader.py search "energy"            # search across all metadata
+python loader.py validate                   # schema check (used by CI)
 ```
 
 ---
 
 ## Adaptation notes (Grok → Claude)
 
-These prompts were originally written for a Grok-style environment with tools like `bash`, `write_file`, `x_keyword_search`, `browse_page`, and native image generation. They have been rewritten to target Claude's actual capabilities:
+The original eight prompts were written for a Grok-style environment with tools like `bash`, `write_file`, `x_keyword_search`, `browse_page`, and native image generation. They have been rewritten to target Claude's actual capabilities:
 
 | Original (Grok) | Replacement (Claude) |
 |---|---|
@@ -183,10 +182,12 @@ These prompts were originally written for a Grok-style environment with tools li
 | "Parallel sub-agents" framing | Sequential mode-switching within one conversation (Claude does not spawn parallel agents) |
 | References to "Grok ecosystem" / "Grok Imagine" | Rewritten to reference Claude features (Artifacts, Projects, Memory, Code Execution) |
 
-Two prompts received structural revisions beyond simple tool-name swaps:
+Prompts that received structural revisions beyond simple tool-name swaps:
 
 - **Automation Orchestrator** and **Chief of Staff (Meta)** were reframed to acknowledge that Claude doesn't run parallel agents. They now describe sequential checkpoints inside a single conversation, and recommend Claude Projects for persistence across sessions.
 - **Deep Research Agent** was updated to explicitly invoke Claude's built-in citation system and the standard copyright limits (paraphrase by default, quotes under 15 words, one quote per source).
+
+The six newer personas (Geopolitical Intelligence, News Monitor, Due Diligence, Political Analysis, Study Strategist, Contract Intelligence) were authored directly for Claude and follow the same discipline: they reference only real Claude tools, state capability limits honestly (e.g. no native X/Twitter search), and carry "not financial/legal advice" framing where appropriate.
 
 ---
 
@@ -199,6 +200,8 @@ The canonical authoring environment for this file is the **Claude Agent Hub** ar
 3. Click **Export JSON** to download a fresh `claude-agents.json`
 4. Commit the new file to this repository
 
+CI will automatically validate every push (`python loader.py validate`), so a malformed export gets caught before it spreads.
+
 If you prefer to edit the JSON directly, make sure to preserve the schema above. All `systemPrompt` values are multi-line strings — keep newlines escaped (`\n`) or use a JSON editor that handles them cleanly.
 
 ---
@@ -207,12 +210,12 @@ If you prefer to edit the JSON directly, make sure to preserve the schema above.
 
 Pull requests welcome. Suggested directions:
 
-- Additional personas (legal, healthcare, education, specific industries)
+- Additional personas (healthcare, education, specific industries)
 - Better example prompts drawn from real use
 - Translations of the `description`, `capabilities`, and `examples` fields into other languages (the registry currently stores them in English; only the Hub UI is bilingual)
 - Loaders for other languages (TypeScript, Go, Rust)
 
-When adding an agent, please include all schema fields and write the `systemPrompt` with the same Grok→Claude discipline applied to the existing set: reference real Claude capabilities, acknowledge limitations honestly, and frame multi-step work as sequential.
+When adding an agent, please include all schema fields and write the `systemPrompt` with the same discipline applied to the existing set: reference real Claude capabilities, acknowledge limitations honestly, and frame multi-step work as sequential. Run `python loader.py validate` before opening a PR.
 
 ---
 
