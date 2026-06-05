@@ -20,13 +20,13 @@ This repository keeps those personas version-controlled, reviewable, and shareab
 
 | Emoji | Name | Focus |
 |---|---|---|
-| 🔍 | Deep Research Agent | Multi-source verification, citation-backed synthesis |
+| 🔍 | Deep Research | Multi-source verification, citation-backed synthesis |
 | 🛠️ | CodeForge | Full-lifecycle software engineering inside Code Execution |
 | 🎨 | VisualCraft | SVG, HTML/React UIs, diagrams, video, presentations |
 | 📖 | Narrative Weaver | Long-form storytelling and content, EN & PT-BR |
 | 📊 | Quant Analyst | Statistical modeling, forecasting, data viz |
 | ⚙️ | Automation Orchestrator | Sequential decomposition of complex projects |
-| 🇧🇷 | Brazilian Cultural Agent | PT-BR localization, business culture, regulation |
+| 🇧🇷 | Brazilian Cultural | PT-BR localization, business culture, regulation |
 | 🧠 | Chief of Staff (Meta) | Strategic planning across the other personas |
 | 🌍 | Geopolitical Intelligence | Sanctions, energy security, political risk → market implications |
 | 📰 | News Monitor | Time-bound news with reliability ratings and mandatory source links |
